@@ -1,0 +1,8 @@
+.es(index=logstash-*, metric=count, timefield='@timestamp', q='type.raw:aws_elb_event AND elb:app/brcore01-sherpa-prod-external/a0835b5948438375 AND request:*eventservice* AND elb_status_code.raw:2*').label('2xx Counts'),.es(index=logstash-*, metric=count, timefield='@timestamp', q='type.raw:aws_elb_event AND elb:app/brcore01-sherpa-prod-external/a0835b5948438375 AND request:*eventservice* AND elb_status_code.raw:4*').label('4xx Counts'),.es(index=logstash-*, metric=count, timefield='@timestamp', q='type.raw:aws_elb_event AND elb:app/brcore01-sherpa-prod-external/a0835b5948438375 AND request:*eventservice* AND elb_status_code.raw:5*').label('5xx Counts')
+
+
+.es(index=prod-userevents-pipeline*, q='eventType.raw:SessionEvent AND eventAction.raw:LoggedIn').mvavg(window=7).title('Login Count').label('Trend'), .es(index=prod-userevents-pipeline*, q='eventType.raw:SessionEvent AND eventAction.raw:LoggedIn').label('Logins per day'), .es(index=prod-userevents-pipeline*, q='eventType.raw:SessionEvent AND eventAction.raw:LoggedIn').aggregate(function=max).label('Max'), .es(index=prod-userevents-pipeline*, q='eventType.raw:SessionEvent AND eventAction.raw:LoggedIn').aggregate(function=min).label('Min')
+
+ .es(index=logstash-*, q='type:aws_elb_event AND elb:brnpb-pro-reportin AND request:https://www.hmhco.com')
+ 
+ .es(index=logstash-*, q='job:cds-onesearch AND stage:prod')
