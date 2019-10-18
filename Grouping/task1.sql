@@ -596,6 +596,52 @@ select
 
 #------========================================================================
 #------========================================================================
+
+/*
+The below SQL is used to find all the Groups and Subgroups and the related 
+details( state, parent org, org, section) which have been assigned a material.
+All the assignments which have a 
+*/
+select 
+orgs.statecode, 
+asgt.organisation_lea_refid, 
+asgt.organisation_school_refid, 
+asgt.section_refid, 
+asgt.parent_group_refid,
+asgt.student_group_refid,
+asgt.so_attr_programid,
+asgt.title,
+asgt.teacher_assignment_refid,
+asgt.student_assignment_refid,
+CASE
+WHEN asgt.student_assignment_status  = '0' THEN 'NOT_STARTED'
+WHEN asgt.student_assignment_status  = '1' THEN 'IN_PROGRESS'
+WHEN asgt.student_assignment_status  = '2' THEN 'COMPLETED'
+WHEN asgt.student_assignment_status  = '3' THEN 'EXPIRED'
+WHEN asgt.student_assignment_status  = '4' THEN 'NOT_SCORED'
+WHEN asgt.student_assignment_status  = '5' THEN 'PEER_REVIEW_REQUIRED'
+WHEN asgt.student_assignment_status  = '6' THEN 'READY_FOR_SCORING'
+WHEN asgt.student_assignment_status  = '7' THEN 'TEACHER_ACTION_REQUIRED'
+WHEN asgt.student_assignment_status  = '8' THEN 'TURNED_IN'
+WHEN asgt.student_assignment_status  = '9' THEN 'SCORING_IN_PROGRESS'
+END AS "student_assignment_status",
+CASE
+WHEN asgt.teacher_assignment_status  = '0' THEN 'NOT_STARTED'
+WHEN asgt.teacher_assignment_status  = '1' THEN 'IN_PROGRESS'
+WHEN asgt.teacher_assignment_status  = '2' THEN 'COMPLETED'
+WHEN asgt.teacher_assignment_status  = '3' THEN 'EXPIRED'
+WHEN asgt.teacher_assignment_status  = '4' THEN 'NOT_SCORED'
+WHEN asgt.teacher_assignment_status  = '5' THEN 'PEER_REVIEW_REQUIRED'
+WHEN asgt.teacher_assignment_status  = '6' THEN 'READY_FOR_SCORING'
+WHEN asgt.teacher_assignment_status  = '7' THEN 'TEACHER_ACTION_REQUIRED'
+WHEN asgt.teacher_assignment_status  = '8' THEN 'TURNED_IN'
+WHEN asgt.teacher_assignment_status  = '9' THEN 'SCORING_IN_PROGRESS'
+END AS "teacher_assignment_status"
+from v_assignments asgt
+JOIN v_organizations orgs ON asgt.organisation_lea_refid = orgs.orgrefid
+where asgt.student_group_refid != ''
+limit 10
+
 #------========================================================================
 #------========================================================================
 #------========================================================================
